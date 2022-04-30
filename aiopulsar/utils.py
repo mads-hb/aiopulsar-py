@@ -60,21 +60,3 @@ class _ClientContextManager(_ContextManager):
         else:
             await self._obj.shutdown()
         self._obj = None
-
-
-class _ReaderContextManager(_ContextManager):
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._obj.close()
-        self._obj = None
-
-
-class _ConsumerContextManager(_ContextManager):
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._obj.close()
-        self._obj = None
-
-
-class _ProducerContextManager(_ContextManager):
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._obj.close()
-        self._obj = None

@@ -5,12 +5,7 @@ import os
 from functools import partial
 from typing import Optional, Union, AsyncContextManager
 import pulsar
-from aiopulsar.utils import (
-    _ClientContextManager,
-    _ReaderContextManager,
-    _ConsumerContextManager,
-    _ProducerContextManager,
-)
+from aiopulsar.utils import _ClientContextManager, _ContextManager
 from aiopulsar.producer import Producer
 from aiopulsar.consumer import Consumer
 from aiopulsar.reader import Reader
@@ -111,7 +106,7 @@ class Client:
 
     def create_reader(self, *args, **kwargs) -> AsyncContextManager[Reader]:
         coro = self._reader(*args, **kwargs)
-        return _ReaderContextManager(coro)
+        return _ContextManager(coro)
 
     async def _consumer(self, *args, **kwargs) -> Consumer:
         if self._client:
@@ -122,7 +117,7 @@ class Client:
 
     def subscribe(self, *args, **kwargs) -> AsyncContextManager[Consumer]:
         coro = self._consumer(*args, **kwargs)
-        return _ConsumerContextManager(coro)
+        return _ContextManager(coro)
 
     async def _producer(self, *args, **kwargs) -> Producer:
         if self._client:
@@ -135,4 +130,4 @@ class Client:
 
     def create_producer(self, *args, **kwargs) -> AsyncContextManager[Producer]:
         coro = self._reader(*args, **kwargs)
-        return _ProducerContextManager(coro)
+        return _ContextManager(coro)
