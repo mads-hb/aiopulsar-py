@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "aiopulsar"
+version = "0.0.0"
+description = "Asynchronous wrapper for the python pulsar-client."
+authors = ["Mads Hansen Baattrup <mads@baattrup.com>"]
+license = "Apache License 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+mypy = "^0.950"
+flake8 = "^4.0.1"
+poetry-githooks = "^2.0.0"
+
+[tool.black]
+skip-string-normalization = true
+
+# pyproject.toml
+[tool.flake8]
+    exclude = ".venv"
+    max-complexity = 10
+    max-line-length = 100
+    extend-ignore = """
+        W503,
+        E203,
+        E701,
+    """
+
+[tool.githooks]
+pre-commit = "mypy . && flake8 . && black ."
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

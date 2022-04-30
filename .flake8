@@ -1,0 +1,12 @@
+[flake8]
+ignore = D203
+exclude =
+    # No need to traverse our git directory
+    .git,
+    # There's no value in checking cache directories
+    __pycache__,
+    # There is no need to check the virtual environment.
+    .venv/ 
+max-complexity = 10
+max-line-length = 88
+extend-ignore = E203
