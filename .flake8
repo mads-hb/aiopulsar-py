@@ -8,5 +8,5 @@ exclude =
     # There is no need to check the virtual environment.
     .venv/ 
 max-complexity = 10
-max-line-length = 88
+max-line-length = 120
 extend-ignore = E203

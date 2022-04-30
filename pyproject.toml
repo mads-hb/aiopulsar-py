@@ -19,24 +19,13 @@ pytest = "^7.1.2"
 [tool.black]
 skip-string-normalization = true
 
-# pyproject.toml
-[tool.flake8]
-    exclude = ".venv"
-    max-complexity = 10
-    max-line-length = 100
-    extend-ignore = """
-        W503,
-        E203,
-        E701,
-    """
-
 [tool.githooks]
 pre-commit = """mypy . && 
-                echo "mypy success" && 
-                flake8 . && 
-                echo "flake8 success" && 
+                echo "mypy success" &&
                 black . && 
-                echo "black success"
+                echo "black success" &&
+                flake8 . &&
+                echo "flake8 success"
             """
 
 [build-system]
