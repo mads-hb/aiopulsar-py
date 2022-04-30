@@ -46,6 +46,7 @@ class _ContextManager(Coroutine):
 
     async def __aenter__(self):
         self._obj = await self._coro
+        print("__aenter__", self._obj)
         return self._obj
 
     async def __aexit__(self, exc_type, exc, tb):
@@ -64,26 +65,17 @@ class _ClientContextManager(_ContextManager):
 
 class _ReaderContextManager(_ContextManager):
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is not None:
-            await self._obj.close()
-        else:
-            await self._obj.shutdown()
+        await self._obj.close()
         self._obj = None
 
 
 class _ConsumerContextManager(_ContextManager):
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is not None:
-            await self._obj.close()
-        else:
-            await self._obj.shutdown()
+        await self._obj.close()
         self._obj = None
 
 
 class _ProducerContextManager(_ContextManager):
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is not None:
-            await self._obj.close()
-        else:
-            await self._obj.shutdown()
+        await self._obj.close()
         self._obj = None

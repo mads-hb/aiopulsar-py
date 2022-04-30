@@ -63,7 +63,7 @@ class Reader:
         """
         Close the reader.
         """
-        await self._execute(self._reader.close())
+        await self._execute(self._reader.close)
         self._reader = None
 
     def is_connected(self) -> bool:

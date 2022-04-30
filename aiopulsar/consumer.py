@@ -90,7 +90,7 @@ class Consumer:
         await fut
 
     async def negative_acknowledge(
-        self, message: Union[pulsar.Message, pulsar.MessageID]
+        self, message: Union[pulsar.Message, pulsar.MessageId]
     ) -> None:
         """
         Acknowledge the failure to process a single message.

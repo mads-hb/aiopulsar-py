@@ -30,7 +30,6 @@ def connect(
     tls_validate_hostname: bool = False,
     logger: Optional[logging.Logger] = None,
     connection_timeout_ms: int = 10000,
-    listener_name: Optional[str] = None,
 ) -> _ClientContextManager:
     coro = _connect(
         service_url,
@@ -46,7 +45,6 @@ def connect(
         tls_validate_hostname=tls_validate_hostname,
         logger=logger,
         connection_timeout_ms=connection_timeout_ms,
-        listener_name=listener_name,
     )
     return _ClientContextManager(coro)
 
@@ -81,7 +79,7 @@ class Client:
 
     async def _connect(self):
         # create pyodbc connection
-        f = self._execute(pulsar.Client, **self._kwargs)
+        f = self._execute(pulsar.Client, self._service_url, **self._kwargs)
         self._client = await f
 
     @property
@@ -104,23 +102,35 @@ class Client:
         self._client.shutdown()
         await self.close()
 
-    async def create_producer(self, *args, **kwargs) -> AsyncContextManager[Producer]:
+    async def _reader(self, *args, **kwargs) -> Reader:
         if self._client:
-            fut = self._execute(self._client.create_producer, *args, **kwargs)
-            return _ProducerContextManager(fut)
+            reader = await self._execute(self._client.create_reader, *args, **kwargs)
+            return Reader(executor=self._executor, loop=self._loop, reader=reader)
         else:
             raise ValueError("Client is closed.")
 
-    async def subscribe(self, *args, **kwargs) -> AsyncContextManager[Consumer]:
+    def create_reader(self, *args, **kwargs) -> AsyncContextManager[Reader]:
+        coro = self._reader(*args, **kwargs)
+        return _ReaderContextManager(coro)
+
+    async def _consumer(self, *args, **kwargs) -> Consumer:
         if self._client:
-            fut = self._execute(self._client.subscribe, *args, **kwargs)
-            return _ConsumerContextManager(fut)
+            consumer = await self._execute(self._client.subscribe, *args, **kwargs)
+            return Consumer(executor=self._executor, loop=self._loop, consumer=consumer)
         else:
             raise ValueError("Client is closed.")
 
-    async def create_reader(self, *args, **kwargs) -> AsyncContextManager[Reader]:
+    def subscribe(self, *args, **kwargs) -> AsyncContextManager[Consumer]:
+        coro = self._consumer(*args, **kwargs)
+        return _ConsumerContextManager(coro)
+
+    async def _producer(self, *args, **kwargs) -> Producer:
         if self._client:
-            fut = self._execute(self._client.create_reader, *args, **kwargs)
-            return _ReaderContextManager(fut)
+            producer = await self._execute(self._client.create_producer, *args, **kwargs)
+            return Producer(executor=self._executor, loop=self._loop, producer=producer)
         else:
             raise ValueError("Client is closed.")
+
+    def create_producer(self, *args, **kwargs) -> AsyncContextManager[Producer]:
+        coro = self._reader(*args, **kwargs)
+        return _ProducerContextManager(coro)
