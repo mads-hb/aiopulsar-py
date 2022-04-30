@@ -31,7 +31,13 @@ skip-string-normalization = true
     """
 
 [tool.githooks]
-pre-commit = "mypy . && flake8 . && black ."
+pre-commit = """mypy . && 
+                echo "mypy success" && 
+                flake8 . && 
+                echo "flake8 success" && 
+                black . && 
+                echo "black success"
+            """
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
