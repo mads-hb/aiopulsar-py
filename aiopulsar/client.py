@@ -126,7 +126,9 @@ class Client:
 
     async def _producer(self, *args, **kwargs) -> Producer:
         if self._client:
-            producer = await self._execute(self._client.create_producer, *args, **kwargs)
+            producer = await self._execute(
+                self._client.create_producer, *args, **kwargs
+            )
             return Producer(executor=self._executor, loop=self._loop, producer=producer)
         else:
             raise ValueError("Client is closed.")

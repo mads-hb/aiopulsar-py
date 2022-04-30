@@ -46,7 +46,6 @@ class _ContextManager(Coroutine):
 
     async def __aenter__(self):
         self._obj = await self._coro
-        print("__aenter__", self._obj)
         return self._obj
 
     async def __aexit__(self, exc_type, exc, tb):
