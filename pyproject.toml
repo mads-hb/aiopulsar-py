@@ -20,12 +20,12 @@ pytest = "^7.1.2"
 skip-string-normalization = true
 
 [tool.githooks]
-pre-commit = """mypy . && 
-                echo "mypy success" &&
-                black . && 
+pre-commit = """black . &&
                 echo "black success" &&
                 flake8 . &&
-                echo "flake8 success"
+                echo "flake8 success" &&
+                mypy . &&
+                echo "mypy success"
             """
 
 [build-system]
