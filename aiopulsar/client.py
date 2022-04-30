@@ -13,6 +13,8 @@ from aiopulsar.reader import Reader
 
 def connect(
     service_url: str,
+    executor: Optional[concurrent.futures.Executor] = None,
+    loop: Optional[asyncio.BaseEventLoop] = None,
     authentication: Optional[pulsar.Authentication] = None,
     operation_timeout_seconds: int = 30,
     io_threads: int = 1,
@@ -28,6 +30,8 @@ def connect(
 ) -> _ClientContextManager:
     coro = _connect(
         service_url,
+        loop=loop,
+        executor=executor,
         authentication=authentication,
         operation_timeout_seconds=operation_timeout_seconds,
         io_threads=io_threads,
