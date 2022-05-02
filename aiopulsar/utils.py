@@ -1,4 +1,4 @@
-from collections.abc import Coroutine
+from typing import Coroutine
 
 
 class _ContextManager(Coroutine):
@@ -55,7 +55,6 @@ class _ContextManager(Coroutine):
 
 
 class _ClientContextManager(_ContextManager):
-
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Override aexit dunder method in _ContextManager. A client should shutdown forcibly when an exception is
         caught."""
