@@ -2,6 +2,7 @@ from collections.abc import Coroutine
 
 
 class _ContextManager(Coroutine):
+    """Define asynchronous context manager object. Implement generator methods."""
 
     __slots__ = ('_coro', '_obj')
 
@@ -54,7 +55,10 @@ class _ContextManager(Coroutine):
 
 
 class _ClientContextManager(_ContextManager):
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Override aexit dunder method in _ContextManager. A client should shutdown forcibly when an exception is
+        caught."""
         if exc_type is not None:
             await self._obj.close()
         else:
