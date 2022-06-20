@@ -3,7 +3,7 @@ import concurrent.futures
 import logging
 import os
 from functools import partial
-from typing import Optional, Union, AsyncContextManager
+from typing import List, Optional, Union, AsyncContextManager
 import pulsar
 from aiopulsar.utils import _ClientContextManager, _ContextManager
 from aiopulsar.producer import Producer
@@ -150,6 +150,22 @@ class Client:
     async def shutdown(self):
         self._client.shutdown()
         await self.close()
+
+    async def get_topic_partitions(self, topic) -> List[str]:
+        """Get the list of partitions for a given topic.
+        If the topic is partitioned, this will return a list of partition names. If the topic is not
+        partitioned, the returned list will contain the topic name itself.
+        This can be used to discover the partitions and create Reader, Consumer or Producer
+        instances directly on a particular partition.
+        :param topic: the topic name to lookup
+        :return: a list of partition name
+        """
+        if self._client:
+            fut = self._execute(self._client.get_topic_partitions, topic)
+            partitions = await fut
+            return partitions
+        else:
+            raise ValueError("Cleint is closed.")
 
     async def _reader(self, *args, **kwargs) -> Reader:
         if self._client:
