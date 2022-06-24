@@ -46,7 +46,7 @@ class Consumer:
         fut = self._execute(self._consumer.unsubscribe)
         await fut
 
-    async def receive(self, timeout_millis: Optional[int]) -> pulsar.Message:
+    async def receive(self, timeout_millis: Optional[int] = None) -> pulsar.Message:
         """
         Receive a single message.
         If a message is not immediately available, this method will block until
