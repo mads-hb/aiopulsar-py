@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aiopulsar-py"
-version = "0.0.0-alpha.3"
+version = "0.0.0-alpha.4"
 description = "Asynchronous wrapper for the python pulsar-client."
 authors = ["Mads Hansen Baattrup <mads@baattrup.com>"]
 license = "Apache 2.0"
