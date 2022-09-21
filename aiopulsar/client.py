@@ -394,5 +394,5 @@ class Client:
            Symmetric encryption class implementation, configuring public key encryption messages for the producer
            and private key decryption messages for the consumer
         """
-        coro = self._reader(*args, **kwargs)
+        coro = self._producer(*args, **kwargs)
         return _ContextManager(coro)

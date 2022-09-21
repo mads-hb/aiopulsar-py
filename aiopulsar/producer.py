@@ -90,7 +90,7 @@ class Producer:
           Specify a delay in timedelta for the delivery of the messages.
         """
         fut = self._execute(
-            self._producer,
+            self._producer.send,
             content,
             properties=properties,
             partition_key=partition_key,
