@@ -16,8 +16,8 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.5"
-pulsar-client = "^2.10.0"
+python = "^3.7"
+pulsar-client = ">=2.10.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
